@@ -1,0 +1,17 @@
+{
+  "name":"sample_app"
+, "description": "a sample app for "
+, "version":"0.0.1"
+, "dependencies": {
+    "underscore":"1.6.0"
+  , "superagent":"0.18.0"
+  }
+, "devDependencies": {
+    "mocha":"1.20.1"
+  , "chai":"1.9.1"
+  , "browserify":"4.1.10"
+  }
+, "scripts": {
+    "build": "browserify testsync.js -o build/build.js"
+  }
+}

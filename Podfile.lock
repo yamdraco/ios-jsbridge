@@ -1,0 +1,10 @@
+PODS:
+  - CWLSynthesizeSingleton (0.0.1)
+
+DEPENDENCIES:
+  - CWLSynthesizeSingleton (= 0.0.1)
+
+SPEC CHECKSUMS:
+  CWLSynthesizeSingleton: e2550fd63751b3c489eaf519761f295836f23740
+
+COCOAPODS: 0.33.1
