@@ -4,38 +4,91 @@ ios-jsbridge
 An iOS bridge for sending messages between Objective C and Javascript via a UIWebview  
 The idea is to allow some workflow and model code to be shared across web app, android and ios  
 
-The idea of the project is inspired by PhoneGap.  
+The ios-bridge is in the process of making currently
 
-WARNING: The project currently is considered to be incomplete, more code and test cases will be added  
-overtime to ensure the bridge is flexible and robust. Any suggestions to my code is welcome.  
-  
-  
+The idea of the project is inspired by PhoneGap and Linkedin  
+To understand more on the research as well as philosophy of this library
+visit http://blog.dracoyam.com/building-hybrid-ios-app-using-javascript-bridge
 
-### Setup  
-The bridge itself is a singleton, to use the code  
-**Sync**  
-This would return the value from a sync function in javascript
+### Installation
+The installation of the library is done via cocoapod  
+Add the following in the Podfile
+```
+pod 'ios-jsbridge', '0.1.0'
+```
+
+### Usage (IOS)
+#### Sync
+IOS Side  
 ```
 NSString *value = [JS runJs:@"app.testFun('string')"]
 ```
-**Async**  
-Async function is not returned immediately, therefore a callback is provided  
-IOS side
+Javascript Side  
 ```
-[JS runAsyncJs:@"app.testAsync" param:@"{}" success:^(NSString *result) {
-  // success callback
-} fail:^(NSError *err) {
-  // fail callback which include a 30s timeout incase the bridge fail
-}]
-```
-JS side  
-In the case of async, the interface input and output of javascript is less flexible  
-**input**
-```
-function(key, req) {
-  // key is the identifier for each request via javascript bridge is an async matter
-  // req is the param
+window.app = {}
+app.testFun = function(value) {
+  ... // your implementation
+  return 'hello world';
 }
 ```
-**output**
-```key + '___' + JSONstring```
+  
+#### Async
+IOS Side
+```
+[JS runAsyncJs:@"app.test_async" param:@"" success:^(NSArray *result){
+  ... // your implement
+} fail:^(NSError* err) {
+  ... // handle error when the bridge hits timeout
+}]
+```
+Javascript Side
+I have implemented a helper for returning data back to IOS, you can copy this to your javascript file
+```
+/**
+ * Make a log to change the window's href
+ * @param {Array} Array of string to print
+ */
+var log = window._log = function(type) {
+  var reply = ""
+  for (var i = 1; i < arguments.length; i++) {
+    var value = arguments[i]
+    if (arguments[i] === Object(arguments[i]) && ((typeof arguments) != "string"))
+      value = JSON.stringify(value)
+    reply += encodeURIComponent(value)
+  }
+  window.location.href = "js://" + type + "/" + reply
+}
+```
+In the async application that is fired from the IOS side, usually you will have parameters together with a key in the front
+```
+window.app = {}
+app.test_async = function(key, req) {
+  async_function(function(res) {  // custom async function call
+    window._log(key, { ... // custom return object / string })  
+    // the key is a counter stored on the IOS Side
+  })
+}
+```
+  
+#### Call IOS from js
+A JSBridgeNotification is also implemented to catch custom calls from JS side  
+IOS Side
+```
+[[NSNotificationCenter defaultCenter] addObserverForName:@"JSBridgeNotification" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+  ... // custom handling here
+  ... notification.userInfo contains {host: '', component: ''}
+}];
+```
+Don't forget to remove the observer in dealloc function  
+  
+JS Side
+```
+// Same as sync methods, _log is used, but instead of passing in the key which is not available
+// a custom text is passed in 
+function() {
+  window._log('custom', {test: 'test param'})
+}
+```
+  
+You can also look at the IOS_JSBridgeTests.m for looking at how to use them
+
