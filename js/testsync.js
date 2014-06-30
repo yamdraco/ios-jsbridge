@@ -2,16 +2,12 @@
 
 var _ = require('underscore')
   , sagent = require('superagent')
+  , basic = require('./base.js')
 
 /**
  * override window's function
  *
  */
-var log = window.log = function() {
-  var reply = _.reduce(arguments, function(memo, value) { return memo + ' ' + value }, "")
-  window.location.href = "js://log/" + reply
-}
-
 var methods = {}
 var testFun = methods.testFun = function(a) {
   return 'hello hello ' + a
@@ -22,27 +18,24 @@ methods.testSync = function() {
 }
 
 methods.test_async = function(key, req) {
-  log(key, ": pre async function", JSON.stringify(req))
+  basic._log("log", ": pre async function", JSON.stringify(req))
   setTimeout(function() {
-    log(key, ": post async funtion")
-    methods._f(null, key, {'async':'test passed'})
+    basic._log(key, {'async':'test passed'})
   }, req._timeout || 30000)
 }
 
 methods.http_request = function(key, req) {
-  log('yahoo request started')
+  basic._log('yahoo request started')
   sagent.get('http://localhost:3000')
     .end(function(err, res) {
-      methods._f(null, key, res.text)
+      methods._f(key, res.text)
     })
 }
 
-methods._f = function(err, key, res) {
-  var response = {}
-  response.status = (err && err.status) || 200
-  response.message = (err && err.message) || ""
-  response.results = res || {}
-  window.location.href = 'js://' + key + '/' + encodeURIComponent(JSON.stringify(response))
+methods.from_js = function(key, req) {
+  setTimeout(function() {
+    basic._log("data", {'test':'test_data'})
+  }, 3000)
 }
 
 if (typeof module !== 'undefined' && module.exports)

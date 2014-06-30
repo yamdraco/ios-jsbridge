@@ -52,7 +52,8 @@
   test.timeout = 60000;
   [test runAsyncTest:^() {
     [JS runAsyncJs:@"app.test_async" param:@"{_timeout: 2000}" success:^(NSArray *result){
-      XCTAssertEqualObjects(@"{\"status\":200,\"message\":\"\",\"results\":{\"async\":\"test passed\"}}", result[0]);
+      NSLog(@"%@", result);
+      XCTAssertEqualObjects(@"{\"async\":\"test passed\"}", result[0]);
       [_test done];
     } fail:^(NSError* err) {
       XCTAssertEqualObjects(err, nil);
@@ -60,6 +61,26 @@
     }];
   }];
   XCTAssertEqual(_test.isDone, YES, @"Async function timeout");
+}
+
+- (void)testNotification {
+  AsyncTestLibrary *test = [[AsyncTestLibrary alloc]init];
+  AsyncTestLibrary __weak *_test = test;
+  test.timeout = 5000;
+  [[NSNotificationCenter defaultCenter] addObserverForName:@"JSBridgeNotification" object:nil queue:nil usingBlock:^(NSNotification *notification) {
+    XCTAssertEqualObjects(notification.userInfo[@"host"], @"data");
+    [_test done];
+  }];
+  [JS runJs:@"app.from_js()"];
+  [test runAsyncTest:^() {
+    [JS runAsyncJs:@"app.test_async" param:@"{_timeout: 2000}" success:^(NSArray *result){
+      XCTAssertEqualObjects(@"{\"async\":\"test passed\"}", result[0]);
+      [_test done];
+    } fail:^(NSError* err) {
+      XCTAssertEqualObjects(err, nil);
+      [_test done];
+    }];
+  }];
 }
 
 @end

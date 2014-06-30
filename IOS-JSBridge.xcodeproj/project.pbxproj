@@ -65,7 +65,7 @@
 		C058D8B5194AABE2003DC747 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		C058D8B6194AABE2003DC747 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		C058D8B8194AABE2003DC747 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Images.xcassets; sourceTree = "<group>"; };
-		C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = file; name = "IOS-JSBridgeTests"; path = "IOS-JSBridgeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "IOS-JSBridgeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C058D8BF194AABE2003DC747 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		C058D8C7194AABE2003DC747 /* IOS-JSBridgeTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "IOS-JSBridgeTests-Info.plist"; sourceTree = "<group>"; };
 		C058D8C9194AABE2003DC747 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				C058D8A3194AABE2003DC747 /* IOS-JSBridge.app */,
-				C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests */,
+				C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -274,7 +274,7 @@
 			);
 			name = "IOS-JSBridgeTests";
 			productName = "IOS-JSBridgeTests";
-			productReference = C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests */;
+			productReference = C058D8BE194AABE2003DC747 /* IOS-JSBridgeTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */

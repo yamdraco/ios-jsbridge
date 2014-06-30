@@ -44,3 +44,10 @@ CWL_DECLARE_SINGLETON_FOR_CLASS(JSBridge)
 - (void)runAsyncJs:(NSString *)fun param:(NSString*)param success:(void(^)(NSArray*))successCallback fail:(void(^)(NSError*))failCallback;
 
 @end
+
+@protocol JSBridgeDelegate
+
+@optional
+- (void) jsBridge:(JSBridge*)bridge responseWithHost:(NSString*)host andComponents:(NSArray*)components;
+
+@end
