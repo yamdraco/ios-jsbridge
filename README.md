@@ -56,7 +56,12 @@ var log = window._log = function(type) {
       value = JSON.stringify(value)
     reply += encodeURIComponent(value)
   }
-  window.location.href = "js://" + type + "/" + reply
+
+  var iframe = document.createElement('iframe');
+  iframe.setAttribute('src', "js://" + type + "/" + reply);
+  document.documentElement.appendChild(iframe);
+  iframe.parentNode.removeChild(iframe);
+  iframe = null;
 }
 ```
 In the async application that is fired from the IOS side, usually you will have parameters together with a key in the front
