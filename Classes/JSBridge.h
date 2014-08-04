@@ -20,6 +20,13 @@ CWL_DECLARE_SINGLETON_FOR_CLASS(JSBridge)
 @property (nonatomic, assign) BOOL isReady;   // Js should only be loaded in when the webview is ready
 
 /**
+ * Run the script by loading in a javascript file
+ *   the script is run after the html is ready
+ * @param javascript file
+ */
+- (void) runScript:(NSString*)script;
+
+/**
  * Perform javascript
  * @param jsStr
  * @param return

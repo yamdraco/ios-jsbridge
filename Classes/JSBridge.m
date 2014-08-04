@@ -14,11 +14,11 @@
 
   NSMutableDictionary *requests; // Request in the progress
   NSMutableDictionary *timers;   // timers to call timeout
+  NSMutableArray *scripts;       // scripts that needed to be run after html is loaded
   
   int keyCounter;                // key to identify each connection
   
   NSMutableArray *queue;         // queue to make request
-  
 }
 
 - (void) runSuccessCallback:(NSArray*)result withKey:(NSString*)key;
@@ -38,6 +38,7 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(JSBridge);
   self = [super init];
   requests = [[NSMutableDictionary alloc]init];
   timers = [[NSMutableDictionary alloc]init];
+  scripts = [[NSMutableArray alloc]init];
 	
   webview = [[UIWebView alloc]init];
   NSURL *htmlFile = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"empty" ofType:@"html"] isDirectory:NO];
@@ -54,6 +55,18 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(JSBridge);
 
 #pragma mark -
 #pragma mark JS
+- (void) runScript:(NSString*)script {
+  if (script)
+    [scripts addObject:script];
+    
+  if (isReady) {
+    for (NSString *script in scripts) {
+      [webview stringByEvaluatingJavaScriptFromString:script];
+    }
+    [scripts removeAllObjects];
+  }
+}
+
 - (NSString*)runJs:(NSString*)jsStr {
   return [webview stringByEvaluatingJavaScriptFromString:jsStr];
 }
@@ -163,6 +176,7 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(JSBridge);
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
   isReady = YES;
+  [self runScript:nil];
   [self runAsyncJs];
 }
 
