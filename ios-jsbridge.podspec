@@ -1,12 +1,12 @@
 Pod::Spec.new do |s|
   s.name         = "ios-jsbridge"
-  s.version      = "0.1.1"
+  s.version      = "0.1.2"
   s.summary      = "async javascript bridge via UIWebview"
 
   s.homepage     = "https://github.com/yamdraco/ios-jsbridge"
   s.license      =  { :type => 'Apache License, Version 2.0' }
   s.author       = { "Draco Yam" => "yamdraco@yahoo.com" }
-  s.source       = { :git => "git@github.com:yamdraco/ios-jsbridge.git", :tag => "0.1.1" }
+  s.source       = { :git => "git@github.com:yamdraco/ios-jsbridge.git", :tag => "0.1.2" }
   s.platform     = :ios
 
   s.source_files  = "Classes/*.{h,m}"

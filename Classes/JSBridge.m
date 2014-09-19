@@ -158,13 +158,13 @@ CWL_SYNTHESIZE_SINGLETON_FOR_CLASS(JSBridge);
   NSString *host = [[request URL] host];
   NSArray *components = [[request URL] pathComponents];
   NSArray *array = [components subarrayWithRange:NSMakeRange(1, [components count]-1)];
+  NSString *resultStr = [[[request URL] pathComponents][1]stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
 
   if ([scheme isEqualToString:@"js"]) {
     if ([host isEqualToString:@"log"]) {
-      NSLog(@"%@", components[1]);
+      NSLog(@"%@", resultStr);
     } else if (requests[host]) {
-      NSArray *array = [components subarrayWithRange:NSMakeRange(1, [components count]-1)];
-      [self runSuccessCallback:array withKey:host];
+      [self runSuccessCallback:@[resultStr] withKey:host];
     } else {
       [[NSNotificationCenter defaultCenter] postNotificationName:@"JSBridgeNotification" object:self userInfo:@{@"host": host, @"components": array}];
     }
